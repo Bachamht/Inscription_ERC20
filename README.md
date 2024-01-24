@@ -30,7 +30,7 @@ function test_DeployInscription() public {
 
 测试结果：
 
-![image]()
+![image](https://github.com/Bachamht/inscription_erc20/blob/main/images/28c31a034abb48b9a7f28b0f60588333.png)
 
 
 
@@ -57,7 +57,7 @@ function test_DeployInscription() public {
 
 
  测试结果：
-![image]()
+![image](https://github.com/Bachamht/inscription_erc20/blob/main/images/39284f2c4d6c57a48bd1fea0701506b0.png)
 
 
 
