@@ -1,66 +1,63 @@
-## Foundry
+## ERC20 铭文
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+主要实现两个功能：
 
-Foundry consists of:
+1.部署铭文：deployInscription(string memory name, string memory symbol, uint totalSupply, uint perMint) 
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+测试代码：
 
-## Documentation
+````solidity
+function test_DeployInscription() public {
+            
+            vm.startPrank(owner);
+            setTem();
+            vm.stopPrank();
 
-https://book.getfoundry.sh/
+            address addressLog = ins.deployInscription("test1", "ts2", 20, 11);
+            console.log(addressLog);
 
-## Usage
+            addressLog = ins.deployInscription("test2", "ts3", 203, 51);
+            console.log(addressLog);
 
-### Build
+            addressLog = ins.deployInscription("test3", "ts4", 201, 1);
+            console.log(addressLog);
 
-```shell
-$ forge build
-```
+            addressLog = ins.deployInscription("test4", "ts5", 120, 31);
+            console.log(addressLog);
 
-### Test
+    }
+````
 
-```shell
-$ forge test
-```
+测试结果：
 
-### Format
+![image]()
 
-```shell
-$ forge fmt
-```
 
-### Gas Snapshots
 
-```shell
-$ forge snapshot
-```
+2.打铭文：mintInscription(address tokenAddr)
 
-### Anvil
+测试代码：
+````solidity
+ function test_MintInscription() public {
+        vm.startPrank(owner);
+            setTem();
+        vm.stopPrank();
+    
+        vm.startPrank(minter1);{
+            address tokenAddr = deploy();
+            ins.mintInscription(tokenAddr);
+            uint balance = Erc20(tokenAddr).balanceOf(minter1);
+            console.log(balance);
+        }
+        vm.stopPrank();
 
-```shell
-$ anvil
-```
+ }
+````
 
-### Deploy
 
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
 
-### Cast
+ 测试结果：
+![image]()
 
-```shell
-$ cast <subcommand>
-```
 
-### Help
 
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
