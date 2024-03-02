@@ -6,7 +6,7 @@ import "./erc20.sol";
 import {UniswapV2Router02} from "../src/uniswapV2_periphery/UniswapV2Router02.sol";
 import {UniswapV2Factory} from "../src/uniswapV2_core/UniswapV2Factory.sol";
 import {UniswapV2Pair} from "./uniswapV2_core/UniswapV2Pair.sol";
-import './libraries/UniswapV2Library.sol';
+import './uniswapV2_periphery/libraries/UniswapV2Library.sol';
 
 import {WETH9} from "../src/uniswapV2_periphery/WETH9.sol";
 
@@ -46,19 +46,19 @@ contract Inscription {
         return cloneERC20;
     }
 
-    function mintInscription(address tokenAddr, uint256 amount, uint256 amountTokenMin, uint256 amountETHMin) public payable {
+    function mintInscription(address tokenAddress, uint256 amount, uint256 amountTokenMin, uint256 amountETHMin) public payable {
         if (msg.value < MintFee) revert MintFeeNotEnough();
-        ETHLiquidityNeeds = msg.value / 2;
-        Erc20(tokenAddr).mint(msg.sender, amount);
-        bytes32 callData = abi.encodeWithSignature("deposit()");
+        uint256 ETHLiquidityNeeds = msg.value / 2;
+        Erc20(tokenAddress).mint(msg.sender, amount);
+        bytes memory callData = abi.encodeWithSignature("deposit()");
         (bool sent, bytes memory data) = msg.sender.call{value: ETHLiquidityNeeds}(callData);
-        UniswapV2Router02(uniswapV2Router).addLiquidityETH(tokenAddr, ETHLiquidityNeeds, amountTokenMin, amountETHMin, address(this), block.timestamp + 60);
+        UniswapV2Router02(payable(uniswapV2Router)).addLiquidityETH(tokenAddress, ETHLiquidityNeeds, amountTokenMin, amountETHMin, address(this), block.timestamp + 60);
     }
 
-    function WithdrawLiquidityGains(address tokenAddr, uint256 liquidity, uint256 amountTokenMin, uint256 amountETHMin,) public onlyOwner {
-        address pair = UniswapV2Library.pairFor(uniswapV2Factory, tokenAddr, weth);
-        if(UniswapV2Pair(pair).balanceOf(address(this) < liquidity)) revert NotEnoughLiquidity();
-        UniswapV2Router02(uniswapV2Router).removeLiquidityETH(tokenAddr, liquidity, amountTokenMin, amountETHMin, address(to), block.timestamp + 60);
+    function WithdrawLiquidityGains(address tokenAddress, uint256 liquidity, uint256 amountTokenMin, uint256 amountETHMin) public onlyOwner {
+        address pair = UniswapV2Library.pairFor(uniswapV2Factory, tokenAddress, weth);
+        if(UniswapV2Pair(pair).balanceOf(address(this)) < liquidity) revert NotEnoughLiquidity();
+        UniswapV2Router02(payable(uniswapV2Router)).removeLiquidityETH(tokenAddress, liquidity, amountTokenMin, amountETHMin, address(this), block.timestamp + 60);
     }
 
 

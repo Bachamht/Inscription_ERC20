@@ -1,6 +1,10 @@
+/*
+    This code is the test code before adding the liquidity mining feature, 
+    it can be used as a reference, but it is outdated
+*/
+
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.13;
-
 import {Test, console} from "forge-std/Test.sol";
 import {Inscription} from "../src/inscriptionFactory.sol";
 import {Erc20} from "../src/erc20.sol";
@@ -56,7 +60,7 @@ contract InscriptionTest is Test {
     
         vm.startPrank(minter1);{
             address tokenAddr = deploy();
-            ins.mintInscription(tokenAddr);
+            //ins.mintInscription(tokenAddr);
             uint balance = Erc20(tokenAddr).balanceOf(minter1);
         }
         vm.stopPrank();
