@@ -2,7 +2,7 @@
 pragma solidity ^0.8.13;
 
 import {Test, console} from "forge-std/Test.sol";
-import {Inscription} from "../src/inscription.sol";
+import {Inscription} from "../src/inscriptionFactory.sol";
 import {Erc20} from "../src/erc20.sol";
 
 contract InscriptionTest is Test {
@@ -25,14 +25,14 @@ contract InscriptionTest is Test {
         return ins.deployInscription("test1", "ts1", 20, 5);
     }
 
-    function setTem() internal {
-        ins.setTem(address(erc));
+    function setTemplete() internal {
+        ins.setTemplete(address(erc));
     }
 
     function test_DeployInscription() public {
             
             vm.startPrank(owner);
-            setTem();
+            setTemplete();
             vm.stopPrank();
 
             address addressLog = ins.deployInscription("test1", "ts2", 20, 11);
@@ -51,14 +51,13 @@ contract InscriptionTest is Test {
 
     function test_MintInscription() public {
         vm.startPrank(owner);
-            setTem();
+            setTemplete();
         vm.stopPrank();
     
         vm.startPrank(minter1);{
             address tokenAddr = deploy();
             ins.mintInscription(tokenAddr);
             uint balance = Erc20(tokenAddr).balanceOf(minter1);
-            console.log(balance);
         }
         vm.stopPrank();
 

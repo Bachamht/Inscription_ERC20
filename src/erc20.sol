@@ -10,14 +10,15 @@ contract Erc20 is ERC20 {
     uint private _perMint;
 
     event MintSuccess(address user, uint amount);
+
     error NotOwner(address user);
- 
+    error AmountNotEnough();
 
     modifier onlyOwner{
         if(msg.sender != owner) revert NotOwner(msg.sender);
         _;
     } 
-    constructor() ERC20("bitcoin", "BTC"){
+    constructor() ERC20("CodeGod", "CG"){
          owner = msg.sender;
     }
 
@@ -28,10 +29,13 @@ contract Erc20 is ERC20 {
         _perMint = perMint;
     }
 
-    function mint(address receiver) public {
-        _mint(receiver, _perMint);
-        emit MintSuccess(receiver, _perMint);
-   }
+    function mint(address receiver, uint256 amount) public {
+        if (amount < _perMint) revert AmountNotEnough();
+        uint halfAmount = amount / 2;
+        _mint(receiver, halfAmount);
+        _mint(msg.sender, halfAmount);
+        emit MintSuccess(receiver, halfAmount);
+    }
 
   
 }
